@@ -41,6 +41,11 @@ monster = {
 	"speed": 1
 }
 
+hidden_coin = {
+	"x": 100,
+	"y": 400
+}
+
 keys = {
 	"up": 273,
 	"down": 274,
@@ -116,15 +121,31 @@ while game_on:
 	distance_between = fabs(hero['x'] - goblin['x']) + fabs(hero['y'] - goblin['y'])
 	if distance_between < 50:
 		print "Goblin Report : collision!"
-		try_your_luck = random.randint(0,1); # you will be confused or moving faster!! Good luck!!
+		try_your_luck = random.randint(0,2); # you will be confused or moving faster!! Good luck!!
 		if try_your_luck == 0:
 			hero['speed'] = -5
+		elif try_your_luck == 1:
+			hero['speed'] = 5
 		else:
 			hero['speed'] = 20
 	else:
 		print "Goblin Report : not touching"
 
-	danger_distance = fabs(hero['x'] - monster ['x']) + fabs(hero['y'] - monster [ 'y'])
+	strange_distance = fabs(hero['x'] - hidden_coin['x']) + fabs(hero['y'] - hidden_coin['y'])
+	if strange_distance < 50:
+		try_your_luck_hard = random.randint(0,2);
+		print "uhhhhh what is going on?"
+		if(strange_distance == 0): # you will be teleported. uhh btw you will be really really slow 
+			hero['x'] = 400
+			hero['y'] = 400
+			hero['speed'] = 1
+		elif(strange_distance == 1): # how did monster get a steroided energy juice?
+			monster['speed'] = 5000000
+		else:
+			hero_image = pygame.image.load("images/monster.png") # you will look like a hot monster!
+
+
+	danger_distance = fabs(hero['x'] - monster['x']) + fabs(hero['y'] - monster['y'])
 	if danger_distance < 50:
 		print "I need to be stronger :("
 		game_on = False
