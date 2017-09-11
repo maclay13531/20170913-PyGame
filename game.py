@@ -2,6 +2,7 @@
 
 # include pygame
 import pygame
+import random
 
 #from the math module(built into python) get the fabs method
 
@@ -16,13 +17,14 @@ pygame.display.set_caption("Goblin Chase")
 background_image = pygame.image.load("images/background.png")
 hero_image = pygame.image.load("images/hero.png")
 goblin_image = pygame.image.load("images/goblin.png")
+monster_image = pygame.image.load("images/monster.png")
 
 
 
 hero = {
 	"x": 100,
 	"y": 100,
-	"speed": 20,
+	"speed": 5,
 	"wins": 0
 }
 
@@ -30,7 +32,13 @@ hero = {
 goblin = {
 	"x": 200,
 	"y": 200,
-	"speed": 20
+	"speed": 5
+}
+
+monster = {
+	"x": 300,
+	"y": 300,
+	"speed": 1
 }
 
 keys = {
@@ -48,8 +56,28 @@ keys_down = {
 }
 
 # create a game loop (while)
+
 game_on = True
 while game_on:
+	direction_decider = random.randint(0,1); # decide whether to change x direction or y direction
+	random_movement = random.randint(-5,5); # decide whether to move positive direction or negative direction
+	moving_positive_direction = random.randint(0,1); # movement for positive direction only
+	moving_negative_direction = random.randint(-1,0); # movement for negative direction only
+
+	if(direction_decider == 0 and monster["x"] >= 500):
+		monster["x"] += monster["speed"] * moving_negative_direction
+	elif(direction_decider == 0 and monster["x"] <= 12):
+		monster["x"] += monster["speed"] * moving_positive_direction
+	elif(direction_decider == 1 and monster["y"] >= 460):
+		monster["y"] += monster["speed"] * moving_negative_direction
+	elif(direction_decider == 1 and monster["y"] <= 20):
+		monster["y"] += monster["speed"] * moving_positive_direction
+	else:
+		if(direction_decider == 0):
+			monster["x"] += monster["speed"] * random_movement
+		else:
+			monster["y"] += monster["speed"] * random_movement
+
 	for event in pygame.event.get():
 		if(event.type == pygame.QUIT):
 			game_on = False
@@ -86,10 +114,36 @@ while game_on:
 
 	#collision detection!!
 	distance_between = fabs(hero['x'] - goblin['x']) + fabs(hero['y'] - goblin['y'])
-	if distance_between < 32:
-		print "collision!"
+	if distance_between < 50:
+		print "Goblin Report : collision!"
+		try_your_luck = random.randint(0,1); # you will be confused or moving faster!! Good luck!!
+		if try_your_luck == 0:
+			hero['speed'] = -5
+		else:
+			hero['speed'] = 20
 	else:
-		print "not touching"
+		print "Goblin Report : not touching"
+
+	danger_distance = fabs(hero['x'] - monster ['x']) + fabs(hero['y'] - monster [ 'y'])
+	if danger_distance < 50:
+		print "I need to be stronger :("
+		game_on = False
+		play_again = raw_input("Play again? yes or no?")
+		print "Monster Report : danger!"
+		print play_again
+		if(play_again == "yes"):
+			game_on = True
+			monster['x'] = 300
+			monster['y'] = 300
+			hero['x'] = 100
+			hero['y'] = 100
+			hero['speed'] = 5
+		else:
+			game_on = False
+	else:
+		print "Monster Report : so far so good!"
+
+
 
 
 # add a quit event (python needs an escape)
@@ -104,6 +158,7 @@ while game_on:
 
 	pygame_screen.blit(hero_image,[hero["x"],hero["y"]])
 	pygame_screen.blit(goblin_image,[goblin["x"],goblin["y"]])
+	pygame_screen.blit(monster_image,[monster["x"],monster["y"]])
 
 # fill in the screen with a color (or image)
 # repeat 6 over and over and over ...
