@@ -63,9 +63,10 @@ keys_down = {
 # create a game loop (while)
 
 game_on = True
+tick = 0 # (tick += 1) (if tick % 20 == 0 ) you can make the monster move only every 20 ticks
 while game_on:
 	direction_decider = random.randint(0,1); # decide whether to change x direction or y direction
-	random_movement = random.randint(-5,5); # decide whether to move positive direction or negative direction
+	random_movement = random.randint(-1,1); # decide whether to move positive direction or negative direction
 	moving_positive_direction = random.randint(0,1); # movement for positive direction only
 	moving_negative_direction = random.randint(-1,0); # movement for negative direction only
 
